@@ -1,0 +1,57 @@
+  private int player2 = 1;//по умолчанию игрок 2 - компьютер
+
+
+
+    public Map() {
+        startNewGame(3);
+        setBackground(Color.white);
+        player1Turn();
+    }
+
+    public void player1Turn() {//выносим отдельными методами ход игрока 1
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+
+                int cmx, cmy;
+                cmx = e.getX() / CELL_SIZE;
+                cmy = e.getY() / CELL_SIZE;
+                if (!gameOver) {
+                    if (setDot(cmx, cmy, PLAYER1_DOT)) {
+                        checkFieldFull();
+                        checkWin(PLAYER1_DOT);
+                        repaint();
+                        if (player2 == 1) {//проверяем, с кем играем
+                            aiTurn();//и переходим либо к ходу компа
+                        } else {
+                            player2Turn();//либо к ходу второго игрока
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+
+    public void player2Turn(){//метод для хода второго игрока
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+
+                int cmx, cmy;
+                cmx = e.getX() / CELL_SIZE;
+                cmy = e.getY() / CELL_SIZE;
+                if (!gameOver) {
+                    if (setDot(cmx, cmy, PLAYER2_DOT)) {
+                        checkFieldFull();
+                        checkWin(PLAYER2_DOT);
+                        repaint();
+                        player1Turn();//возвращаемся обратно
+                    }
+                }
+            }
+        });
+    }
